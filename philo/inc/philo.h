@@ -8,10 +8,22 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <limits.h>
+# include <errno.h>
 
 # ifndef MIN_TIME
 #  define MIN_TIME	60000
 # endif
+
+typedef enum e_opcode
+{
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTROY,
+	CREATE,
+	JOIN,
+	DETACH,
+}	t_opcode;
 
 typedef pthread_mutex_t	t_mtx;
 typedef struct s_table	t_table;
@@ -19,12 +31,12 @@ typedef struct s_table	t_table;
 typedef struct s_fork
 {
 	t_mtx	fork;
-	int		fork_id;
+	size_t		fork_id;
 }	t_fork;
 
 typedef struct s_philo
 {
-	int			id;
+	size_t			id;
 	long		meals_counter;
 	bool		full;
 	long		last_meal_time;
@@ -47,7 +59,11 @@ struct s_table
 	t_philo	*philos;
 };
 
+void	*secure_malloc(size_t size);
 void	exit_programme(char *message);
 void	parse_input(t_table *table, char **argv);
-
+void	init_data(t_table *table);
+void	thread_handle(pthread_t *thread, void*(*foo)(void *),
+	void *data, t_opcode opcode);
+void	mutex_handle(t_mtx *mutex, t_opcode opcode);
 #endif

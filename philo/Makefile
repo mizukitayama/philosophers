@@ -5,7 +5,7 @@ AR		=	ar rcs
 
 OBJ_DIR	=	obj/
 SRC_DIR	=	src/
-SRCS	=	main.c utils.c parse_input.c
+SRCS	=	main.c utils.c parse_input.c init.c thread_mutex_utils.c
 
 NAME	=	philo
 

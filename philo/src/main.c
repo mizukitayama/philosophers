@@ -7,7 +7,7 @@ int	main(int argc, char **argv)
 	if (argc == 5 || argc == 6)
 	{
 		parse_input(&table, argv);
-		// init_data(&table);
+		init_data(&table);
 		// start_dinner(&table);
 		// clean_programme();
 	}
@@ -15,4 +15,9 @@ int	main(int argc, char **argv)
 	{
 		exit_programme("5 or 6 values are needed.");
 	}
+}
+
+__attribute__((destructor)) static void destructor()
+{
+	system("leaks -q philo");
 }
