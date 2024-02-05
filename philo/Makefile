@@ -5,8 +5,8 @@ AR		=	ar rcs
 
 OBJ_DIR	=	obj/
 SRC_DIR	=	src/
-SRCS	=	main.c utils.c parse_input.c
-
+SRCS	=	main.c utils.c parse_input.c init.c mutex_thread_handler.c \
+				supper.c getters_setters.c synchro.c write.c
 NAME	=	philo
 
 SRCS_OBJS	=	$(SRCS:.c=.o)
@@ -17,11 +17,13 @@ INCLUDE	=	-I inc/
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(INCLUDE) -o $(NAME) $(OBJS)
+	# $(CC) $(CFLAGS) $(INCLUDE) -o $(NAME) $(OBJS)
+	$(CC) $(INCLUDE) -o $(NAME) $(OBJS)
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 	mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(INCLUDE) -o $@ -c $^
+	# $(CC) $(CFLAGS) $(INCLUDE) -o $@ -c $^
+	$(CC) $(INCLUDE) -o $@ -c $^
 
 clean:
 	$(RM) $(OBJS)

@@ -11,7 +11,7 @@ static bool	is_digit(char c)
 }
 
 static const char	*valid_input(const char *str)
-/* checks negatives, degits, spaces, int max*/
+/* checks negatives, degits, spaces, int max */
 {
 	int				len;
 	const char		*num;
@@ -22,15 +22,15 @@ static const char	*valid_input(const char *str)
 	if (*str == '+')
 		str++;
 	else if (*str == '-')
-		exit_programme("Error\n"Y_ERR_MSG"Only positive values allowed.");
+		exit_programme("Error\n"Y_ERR_MSG"Only positive values allowed.", NULL);
 	if (!is_digit(*str))
-		exit_programme("Error\n"Y_ERR_MSG"The input is not a digit.");
+		exit_programme("Error\n"Y_ERR_MSG"The input is not a digit.", NULL);
 	num = str;
 	while (is_digit(*str++))
 		len++;
 	if (len > 10)
 		exit_programme("Error\n"
-			Y_ERR_MSG"The value needs to be smaller than INT_MAX.");
+			Y_ERR_MSG"The value needs to be smaller than INT_MAX.", NULL);
 	return (num);
 }
 
@@ -44,17 +44,17 @@ static long	ft_atol(const char *str)
 		num = (num * 10) + (*str++ - '0');
 	if (num > INT_MAX)
 		exit_programme("Error\n"
-			Y_ERR_MSG"The value needs to be smaller than INT_MAX.");
+			Y_ERR_MSG"The value needs to be smaller than INT_MAX.", NULL);
 	return (num);
 }
 
 /*
-	arguments:
-	1 number_of_philosophers
-	2 time_to_die
-	3 time_to_eat
-	4 time_to_sleep
-	5 [number_of_times_each_philosopher_must_eat]
+ *	arguments:
+ *	1 number_of_philosophers
+ *	2 time_to_die
+ *	3 time_to_eat
+ *	4 time_to_sleep
+ *	5 [number_of_times_each_philosopher_must_eat]
 */
 void	parse_input(t_table *table, char **argv)
 /* checks inputs and init data, converting time to miliseconds */
@@ -67,7 +67,7 @@ void	parse_input(t_table *table, char **argv)
 		|| table->time_to_eat < MIN_TIME
 		|| table->time_to_sleep < MIN_TIME)
 		exit_programme("Error\n"
-			Y_ERR_MSG"Use a larger number for the timestamps.");
+			Y_ERR_MSG"Use a larger number for the timestamps.", NULL);
 	if (argv[5])
 		table->nbr_limit_meals = ft_atol(argv[5]);
 	else

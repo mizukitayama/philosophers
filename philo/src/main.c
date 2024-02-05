@@ -7,12 +7,18 @@ int	main(int argc, char **argv)
 	if (argc == 5 || argc == 6)
 	{
 		parse_input(&table, argv);
-		// init_data(&table);
-		// start_dinner(&table);
-		// clean_programme();
+		init_data(&table);
+		start_dinner(&table);
+		clean_programme(&table);
 	}
 	else
 	{
-		exit_programme("Error\n"Y_ERR_MSG"5 or 6 inputs needed.");
+		exit_programme("Error\n"Y_ERR_MSG"5 or 6 inputs needed.", NULL);
 	}
+}
+
+static void destructor() __attribute__((destructor));
+
+static void destructor() {
+    system("leaks -q philo");
 }
