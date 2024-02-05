@@ -22,14 +22,15 @@ static const char	*valid_input(const char *str)
 	if (*str == '+')
 		str++;
 	else if (*str == '-')
-		exit_programme("Only positive values allowed.");
+		exit_programme("Error\n"Y_ERR_MSG"Only positive values allowed.");
 	if (!is_digit(*str))
-		exit_programme("The input is not a digit.");
+		exit_programme("Error\n"Y_ERR_MSG"The input is not a digit.");
 	num = str;
 	while (is_digit(*str++))
 		len++;
 	if (len > 10)
-		exit_programme("The value needs to be smaller than INT_MAX.");
+		exit_programme("Error\n"
+			Y_ERR_MSG"The value needs to be smaller than INT_MAX.");
 	return (num);
 }
 
@@ -42,16 +43,21 @@ static long	ft_atol(const char *str)
 	while (is_digit(*str))
 		num = (num * 10) + (*str++ - '0');
 	if (num > INT_MAX)
-		exit_programme("The value needs to be smaller than INT_MAX.");
+		exit_programme("Error\n"
+			Y_ERR_MSG"The value needs to be smaller than INT_MAX.");
 	return (num);
 }
 
-// number_of_philosophers
-// time_to_die
-// time_to_eat
-// time_to_sleep
-// [number_of_times_each_philosopher_must_eat]
+/*
+	arguments:
+	1 number_of_philosophers
+	2 time_to_die
+	3 time_to_eat
+	4 time_to_sleep
+	5 [number_of_times_each_philosopher_must_eat]
+*/
 void	parse_input(t_table *table, char **argv)
+/* checks inputs and init data, converting time to miliseconds */
 {
 	table->philo_nbr = ft_atol(argv[1]);
 	table->time_to_die = ft_atol(argv[2]) * 1000;
@@ -60,7 +66,8 @@ void	parse_input(t_table *table, char **argv)
 	if (table->time_to_die < MIN_TIME
 		|| table->time_to_eat < MIN_TIME
 		|| table->time_to_sleep < MIN_TIME)
-		exit_programme("Use a larger number for the timestamps.");
+		exit_programme("Error\n"
+			Y_ERR_MSG"Use a larger number for the timestamps.");
 	if (argv[5])
 		table->nbr_limit_meals = ft_atol(argv[5]);
 	else

@@ -13,6 +13,6 @@ int	main(int argc, char **argv)
 	}
 	else
 	{
-		exit_programme("5 or 6 values are needed.");
+		exit_programme("Error\n"Y_ERR_MSG"5 or 6 inputs needed.");
 	}
 }

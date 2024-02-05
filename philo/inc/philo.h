@@ -13,6 +13,14 @@
 #  define MIN_TIME	60000
 # endif
 
+# define RST							"\033[0m"
+# define R_ERR						"\033[1;31m"
+# define G								"\033[1;32m"
+# define Y_ERR_MSG				"\033[1;33m"
+# define B								"\033[1;34m"
+# define M								"\033[1;35m" // Magenta
+# define C								"\033[1;36m" // Cyan
+
 typedef pthread_mutex_t	t_mtx;
 typedef struct s_table	t_table;
 
@@ -49,5 +57,5 @@ struct s_table
 
 void	exit_programme(char *message);
 void	parse_input(t_table *table, char **argv);
-
+void	*safe_malloc(size_t bytes);
 #endif
