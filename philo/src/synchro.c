@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   synchro.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/06 18:06:45 by mtayama           #+#    #+#             */
+/*   Updated: 2024/02/06 20:46:19 by mtayama          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	wait_all_threads(t_table *table)
@@ -6,23 +18,24 @@ void	wait_all_threads(t_table *table)
 		;
 }
 
-bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr, t_table *table)
+bool	all_threads_running(t_mtx *mutex, long *threads,
+	long philo_nbr, t_table *table)
 {
 	bool	rt;
 
 	rt = false;
-	safe_mutex_handle(mutex, LOCK, table);
+	pthread_mutex_lock(mutex);
 	if (*threads == philo_nbr)
 		rt = true;
-	safe_mutex_handle(mutex, UNLOCK, table);
+	pthread_mutex_unlock(mutex);
 	return (rt);
 }
 
 void	increase_long(t_mtx *mutex, long *value, t_table *table)
 {
-	safe_mutex_handle(mutex, LOCK, table);
+	pthread_mutex_lock(mutex);
 	(*value)++;
-	safe_mutex_handle(mutex, UNLOCK, table);
+	pthread_mutex_unlock(mutex);
 }
 
 /* 
@@ -30,10 +43,6 @@ void	increase_long(t_mtx *mutex, long *value, t_table *table)
  * 1. |eating||sleeping||   thinking   |💀
  * 2.         |eating||sleeping||eating| <- force to think
  * 3.                 |eating||sleeping|      after sleeping
- * 
- * 1.
- * 2.
- * 3.
 */
 void	desynchronize_philo(t_philo *philo)
 {
@@ -42,7 +51,7 @@ void	desynchronize_philo(t_philo *philo)
 		if (philo->id % 2 == 0)
 			ft_usleep(30000, philo->table);
 	}
-	else 
+	else
 	{
 		if (philo->id % 2 != 0)
 			think(philo, true);

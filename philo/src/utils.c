@@ -1,49 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/06 18:06:48 by mtayama           #+#    #+#             */
+/*   Updated: 2024/02/06 19:57:46 by mtayama          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-static void free_table(t_table *table)
+void	exit_programme(char *message, t_table *table)
 {
-	if (table->forks_malloc == true)
-		free(table->forks);
-	if (table->philos_malloc == true)
-		free(table->philos);
-}
-
-void	exit_programme(char *message, t_table *table_to_free)
-{
-	if (table_to_free != NULL)
-		free_table(table_to_free);
+	if (table != NULL)
+	{
+		if (table->forks_malloc == true)
+			free(table->forks);
+		if (table->philos_malloc == true)
+			free(table->philos);
+	}
 	printf(R_ERR"%s\n"RST, message);
-	exit(EXIT_FAILURE);
 }
 
-void	*safe_malloc(size_t bytes, t_table *table_to_free)
+void	*safe_malloc(size_t bytes, t_table *table)
 {
 	void	*rt;
 
 	rt = malloc(bytes);
 	if (rt == NULL)
-		exit_programme("Error in allocating memory.", table_to_free);
+	{
+		exit_programme("Error in allocating memory.", table);
+	}
 	return (rt);
 }
 
-long	gettime(t_time_code time_code, t_table *table_to_free)
+long	gettime(t_time_code time_code, t_table *table)
 {
 	struct timeval	tv;
 
-	if (gettimeofday(&tv, NULL) != 0)
-		exit_programme("Gettimeofday has failed.", table_to_free);
+	gettimeofday(&tv, NULL);
 	if (time_code == SECOND)
 		return (tv.tv_sec + (tv.tv_usec / 1000000));
 	else if (time_code == MILLISECOND)
 		return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 	else if (time_code == MICROSECOND)
 		return ((tv.tv_sec * 1000000) + tv.tv_usec);
-	exit_programme("Wrong input of time code.", table_to_free);
 	return (0);
 }
 
 /*
- * usleep() to reduce CPU usage,
  * refine last microsec with spinlock
 */
 void	ft_usleep(long usec, t_table *table)
@@ -62,7 +69,6 @@ void	ft_usleep(long usec, t_table *table)
 		if (remaining > 1000)
 			usleep(remaining / 2);
 		else
-		// SPINLOCK
 			while (gettime(MICROSECOND, table) - start < usec)
 				;
 	}

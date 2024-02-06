@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/06 18:06:04 by mtayama           #+#    #+#             */
+/*   Updated: 2024/02/06 20:43:46 by mtayama          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 /* 
@@ -15,7 +27,6 @@ static void	assign_forks(t_philo *philo, t_fork *forks, size_t position)
 	long	philo_nbr;
 
 	philo_nbr = philo->table->philo_nbr;
-
 	if (philo->id % 2 == 0)
 	{
 		philo->first_fork = &(forks[position]);
@@ -42,30 +53,35 @@ static void	init_philo(t_table *table)
 		philo->full = false;
 		philo->meals_counter = 0;
 		philo->table = table;
-		safe_mutex_handle(&(philo->philo_mutex), INIT, table);
+		pthread_mutex_init(&(philo->philo_mutex), NULL);
 		assign_forks(philo, table->forks, i);
 		i++;
 	}
 }
 
-void	init_data(t_table *table)
+int	init_data(t_table *table)
 {
 	long	i;
 
 	i = 0;
 	table->end_simulation = false;
 	table->all_threads_ready = false;
-	table->philos = safe_malloc(sizeof(t_philo) * table->philo_nbr, NULL);
+	table->philos = malloc(sizeof(t_philo) * table->philo_nbr);
+	if (table->philos == NULL)
+		return (0);
 	table->philos_malloc = true;
-	safe_mutex_handle(&(table->table_mutex), INIT, table);
-	safe_mutex_handle(&(table->write_mutex), INIT, table);
-	table->forks = safe_malloc(sizeof(t_fork) * table->philo_nbr, table);
+	pthread_mutex_init(&(table->table_mutex), NULL);
+	pthread_mutex_init(&(table->write_mutex), NULL);
+	table->forks = malloc(sizeof(t_fork) * table->philo_nbr);
+	if (table->forks == NULL)
+		return (0);
 	table->forks_malloc = true;
-	while(i < table->philo_nbr)
+	while (i < table->philo_nbr)
 	{
-		safe_mutex_handle(&(table->forks[i].fork_mutex), INIT, table);
+		pthread_mutex_init(&(table->forks[i].fork_mutex), NULL);
 		table->forks[i].fork_id = i;
 		i++;
 	}
 	init_philo(table);
+	return (1);
 }

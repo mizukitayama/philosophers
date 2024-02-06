@@ -1,19 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   clean.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/06 18:04:26 by mtayama           #+#    #+#             */
+/*   Updated: 2024/02/06 20:35:39 by mtayama          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	clean_programme(t_table *table)
 {
 	t_philo	*philo;
-	long		i;
+	long	i;
 
 	i = 0;
 	while (i < table->philo_nbr)
 	{
 		philo = table->philos + i;
-		safe_mutex_handle(&(philo->philo_mutex), DESTROY, table);
+		pthread_mutex_destroy(&(philo->philo_mutex));
 		i++;
 	}
-	safe_mutex_handle(&(table->write_mutex), DESTROY, table);
-	safe_mutex_handle(&(table->table_mutex), DESTROY, table);
+	pthread_mutex_destroy(&(table->write_mutex));
+	pthread_mutex_destroy(&(table->table_mutex));
 	free(table->forks);
 	free(table->philos);
 }
