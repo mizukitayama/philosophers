@@ -10,13 +10,37 @@ void	*lone_philo(void	*arg)
 	increase_long(&(philo->table->table_mutex), &(philo->table->threads_running_nbr), philo->table);
 	write_status(TAKE_FIRST_FORK, philo);
 	while (!simulation_finished(philo->table))
-		usleep(100);
+		ft_usleep(200, philo->table);
 	return (NULL);
 }
 
-static void	think(t_philo *philo)
+/* 
+ * philo is not even,
+ * 1. |eating||sleeping||   thinking   |💀
+ * 2.         |eating||sleeping||eating| <- force to think
+ * 3.                 |eating||sleeping|      after sleeping
+ * 
+ * 1. |eating|s|   think   |eating|
+ * 2.        |eating|s|   think   |eating|
+ * 3.               |eating|s|   think   |
+ * time_to_think = time_to_eat * 2 - time_to_sleep
+*/
+void	think(t_philo *philo, bool is_pre_simulation)
 {
-	write_status(THINKING, philo);
+	long	time_to_eat;
+	long 	time_to_sleep;
+	long 	time_to_think;
+
+	if (!is_pre_simulation)
+		write_status(THINKING, philo);
+	if (philo->table->philo_nbr % 2 == 0)
+		return ;
+	time_to_eat = philo->table->time_to_eat;
+	time_to_sleep = philo->table->time_to_sleep;
+	time_to_think = time_to_eat * 2 - time_to_sleep;
+	if (time_to_think < 0)
+		time_to_think = 0;
+	ft_usleep(time_to_think * 0.3, philo->table);
 }
 
 /*
@@ -35,7 +59,9 @@ static void	eat(t_philo *philo)
 	write_status(EATING, philo);
 	ft_usleep(philo->table->time_to_eat, philo->table);
 	if (philo->table->nbr_limit_meals > 0 && philo->meals_counter == philo->table->nbr_limit_meals)
+	{
 		set_bool(&(philo->philo_mutex), &(philo->full), true, philo->table);
+	}
 	safe_mutex_handle(&(philo->first_fork->fork_mutex), UNLOCK, philo->table);
 	safe_mutex_handle(&(philo->second_fork->fork_mutex), UNLOCK, philo->table);
 }
@@ -43,6 +69,9 @@ static void	eat(t_philo *philo)
 /*
  * 1. waits all philos to start their simulation
  * 2. endless loop of eat, sleep, think
+ * 
+ * increase_long() -> synchro with monitor
+ * 
 */
 static void	*dinner_simulation(void *data)
 {
@@ -52,15 +81,15 @@ static void	*dinner_simulation(void *data)
 	wait_all_threads(philo->table);
 	set_long(&(philo->philo_mutex), &(philo->last_meal_time), gettime(MILLISECOND, philo->table), philo->table);
 	increase_long(&(philo->table->table_mutex), &(philo->table->threads_running_nbr), philo->table);
-
+	desynchronize_philo(philo);
 	while (!simulation_finished(philo->table))
 	{
-		if (philo->full)
+		if (get_bool(&(philo->philo_mutex), &(philo->full), philo->table))
 			break;
 		eat(philo);
 		write_status(SLEEPING, philo);
 		ft_usleep(philo->table->time_to_sleep, philo->table);
-		think(philo);
+		think(philo, false);
 	}
 	return (NULL);
 }

@@ -24,3 +24,27 @@ void	increase_long(t_mtx *mutex, long *value, t_table *table)
 	(*value)++;
 	safe_mutex_handle(mutex, UNLOCK, table);
 }
+
+/* 
+ * when time_to_eat <= time_to_sleep
+ * 1. |eating||sleeping||   thinking   |💀
+ * 2.         |eating||sleeping||eating| <- force to think
+ * 3.                 |eating||sleeping|      after sleeping
+ * 
+ * 1.
+ * 2.
+ * 3.
+*/
+void	desynchronize_philo(t_philo *philo)
+{
+	if (philo->table->philo_nbr % 2 == 0)
+	{
+		if (philo->id % 2 == 0)
+			ft_usleep(30000, philo->table);
+	}
+	else 
+	{
+		if (philo->id % 2 != 0)
+			think(philo, true);
+	}
+}

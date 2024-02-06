@@ -103,6 +103,7 @@ void	init_data(t_table *table);
 
 /* dinner simulation */
 void	start_dinner(t_table *table);
+void	think(t_philo *philo, bool is_pre_simulation);
 
 /* utils */
 void	exit_programme(char *message, t_table *table);
@@ -129,8 +130,12 @@ bool	simulation_finished(t_table *table);
 void	wait_all_threads(t_table *table);
 void	increase_long(t_mtx *mutex, long *value, t_table *table);
 bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr, t_table *table);
+void	desynchronize_philo(t_philo *philo);
 
 /* monitor */
 void	*monitor(void *data);
+
+/* clean */
+void	clean_programme(t_table *table);
 
 #endif

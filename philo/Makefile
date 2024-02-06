@@ -6,7 +6,7 @@ AR		=	ar rcs
 OBJ_DIR	=	obj/
 SRC_DIR	=	src/
 SRCS	=	main.c utils.c parse_input.c init.c mutex_thread_handler.c \
-				supper.c getters_setters.c synchro.c write.c
+				supper.c getters_setters.c synchro.c write.c clean.c monitor.c
 NAME	=	philo
 
 SRCS_OBJS	=	$(SRCS:.c=.o)

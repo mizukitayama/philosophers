@@ -10,8 +10,8 @@ static void free_table(t_table *table)
 
 void	exit_programme(char *message, t_table *table_to_free)
 {
-	// if (table_to_free != NULL)
-	// 	free_table(table_to_free);
+	if (table_to_free != NULL)
+		free_table(table_to_free);
 	printf(R_ERR"%s\n"RST, message);
 	exit(EXIT_FAILURE);
 }
@@ -56,7 +56,7 @@ void	ft_usleep(long usec, t_table *table)
 	while (gettime(MICROSECOND, table) - start < usec)
 	{
 		if (simulation_finished(table))
-			break;
+			break ;
 		elapsed = gettime(MICROSECOND, table) - start;
 		remaining = usec - elapsed;
 		if (remaining > 1000)

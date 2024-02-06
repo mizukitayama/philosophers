@@ -61,7 +61,9 @@ void	safe_thread_handle(pthread_t *thread, void *(foo)(void *),
 		void *data, t_opcode opcode, t_table *table_to_free)
 {
 	if (opcode == CREATE)
+	{
 		handle_thread_errors(pthread_create(thread, NULL, foo, data), opcode, table_to_free);
+	}
 	else if (opcode == JOIN)
 		handle_thread_errors(pthread_join(*thread, NULL), opcode, table_to_free);
 	else if (opcode == DETACH)
