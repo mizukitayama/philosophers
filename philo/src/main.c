@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:28 by mtayama           #+#    #+#             */
-/*   Updated: 2024/02/06 20:52:46 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/02/08 19:45:25 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int argc, char **argv)
 	}
 	else
 	{
-		exit_programme("Error\n"Y_ERR_MSG"5 or 6 inputs needed.", NULL);
+		free_programme("Error\n"Y_ERR_MSG"5 or 6 inputs needed.", NULL);
 		return (0);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:39 by mtayama           #+#    #+#             */
-/*   Updated: 2024/02/06 19:50:37 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/02/08 19:40:13 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static const char	*valid_input(const char *str)
 	{
 		if (!is_digit(*str))
 		{
-			exit_programme("Error\n"Y_ERR_MSG"The input is not a digit.", NULL);
+			free_programme("Error\n"Y_ERR_MSG"The input is not a digit.", NULL);
 			return (NULL);
 		}
 		len++;
@@ -59,7 +59,7 @@ static long	ft_atol(const char *str)
 		num = (num * 10) + (*str++ - '0');
 	if (num > INT_MAX)
 	{
-		exit_programme("Error\n"
+		free_programme("Error\n"
 			Y_ERR_MSG"The value needs to be smaller than INT_MAX.", NULL);
 		return (-1);
 	}
@@ -92,7 +92,7 @@ int	parse_input(t_table *table, char **argv)
 		|| table->time_to_eat < MIN_TIME
 		|| table->time_to_sleep < MIN_TIME)
 	{
-		exit_programme("Error\n"
+		free_programme("Error\n"
 			Y_ERR_MSG"Use a larger number for the timestamps.", NULL);
 		return (0);
 	}

@@ -1,5 +1,5 @@
 CC		=	cc
-# CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror
 RM		=	rm -rf
 AR		=	ar rcs
 
@@ -31,3 +31,5 @@ fclean:	clean
 	$(RM) $(NAME)
 
 re:	fclean $(NAME)
+
+.PHONY: all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:01:20 by mtayama           #+#    #+#             */
-/*   Updated: 2024/02/06 20:52:21 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/02/08 19:40:13 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <limits.h>
 # include <errno.h>
 
-# define MIN_TIME	60000
+# define MIN_TIME	80000
 
 # define RST		"\033[0m"
 # define R_ERR		"\033[1;31m"
@@ -115,8 +115,8 @@ void	start_dinner(t_table *table);
 void	think(t_philo *philo, bool is_pre_simulation);
 
 /* utils */
-void	exit_programme(char *message, t_table *table);
-long	gettime(t_time_code time_code, t_table *table);
+void	free_programme(char *message, t_table *table);
+long	gettime(t_time_code time_code);
 void	ft_usleep(long usec, t_table *table);
 void	*safe_malloc(size_t bytes, t_table *table);
 
@@ -124,17 +124,16 @@ void	*safe_malloc(size_t bytes, t_table *table);
 void	write_status(t_philo_status status, t_philo *philo);
 
 /* getters and setters */
-void	set_bool(t_mtx *mutex, bool *dest, bool value, t_table *table);
-bool	get_bool(t_mtx *mutex, bool *value, t_table *table);
-void	set_long(t_mtx *mutex, long *dest, long value, t_table *table);
-long	get_long(t_mtx *mutex, long *value, t_table *table);
+void	set_bool(t_mtx *mutex, bool *dest, bool value);
+bool	get_bool(t_mtx *mutex, bool *value);
+void	set_long(t_mtx *mutex, long *dest, long value);
+long	get_long(t_mtx *mutex, long *value);
 bool	simulation_finished(t_table *table);
 
 /* synchronous functions */
 void	wait_all_threads(t_table *table);
-void	increase_long(t_mtx *mutex, long *value, t_table *table);
-bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr,
-			t_table *table);
+void	increase_long(t_mtx *mutex, long *value);
+bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr);
 void	desynchronize_philo(t_philo *philo);
 
 /* monitor */
