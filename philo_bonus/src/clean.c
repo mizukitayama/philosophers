@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/06 18:06:28 by mtayama           #+#    #+#             */
-/*   Updated: 2024/02/08 19:57:01 by mtayama          ###   ########.fr       */
+/*   Created: 2024/02/06 18:04:26 by mtayama           #+#    #+#             */
+/*   Updated: 2024/05/11 17:59:12 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-int	main(int argc, char **argv)
+void	clean_programme(t_table *table)
 {
-	t_table	table;
+	t_philo	*philo;
+	long	i;
 
-	if (argc == 5 || argc == 6)
+	i = 0;
+	while (i < table->philo_nbr)
 	{
-		if (!parse_input(&table, argv))
-			return (0);
-		if (!init_data(&table))
-			return (0);
-		start_dinner(&table);
-		clean_programme(&table);
-		return (0);
+		philo = table->philos + i;
+		sem_unlink("/philo");
+		i++;
 	}
-	else
-	{
-		free_programme("Error\n"Y_ERR_MSG"5 or 6 inputs needed.", NULL);
-		return (0);
-	}
+	sem_unlink("/write");
+	sem_unlink("/table");
+	free(table->forks);
+	free(table->philos);
 }

@@ -6,11 +6,11 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:28 by mtayama           #+#    #+#             */
-/*   Updated: 2024/02/08 19:57:01 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/11 19:14:21 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	main(int argc, char **argv)
 {
