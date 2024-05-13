@@ -12,7 +12,7 @@
 
 #include "philo_bonus.h"
 
-static bool	philo_died(t_philo *philo)
+bool	philo_died(t_philo *philo)
 {
 	long	elapsed;
 	long	time_to_die;
@@ -33,9 +33,6 @@ void	*monitor(void *data)
 	t_table	*table;
 
 	table = (t_table *)data;
-	while (!all_threads_running(table->table_sem,
-			&(table->threads_running_nbr), table->philo_nbr))
-		;
 	while (!simulation_finished(table))
 	{
 		i = 0;

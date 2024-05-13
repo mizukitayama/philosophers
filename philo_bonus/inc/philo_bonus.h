@@ -135,6 +135,7 @@ void	desynchronize_philo(t_philo *philo);
 
 /* monitor */
 void	*monitor(void *data);
+bool	philo_died(t_philo *philo);
 
 /* clean */
 void	clean_programme(t_table *table);

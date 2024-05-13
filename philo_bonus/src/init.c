@@ -46,6 +46,7 @@ static void	init_philo(t_table *table)
 	t_philo	*philo;
 
 	i = 0;
+	sem_unlink("/philo");
 	while (i < table->philo_nbr)
 	{
 		philo = table->philos + i;
@@ -67,14 +68,15 @@ int	init_data(t_table *table)
 	if (table->philos == NULL)
 		return (0);
 	table->philos_malloc = true;
+	sem_unlink("/write");
+	sem_unlink("/table");
 	table->write_sem = sem_open("/write", O_CREAT, 0644, 1);
-	printf("%d", get_bool(table->write_sem, &(table->all_threads_ready)));
 	table->table_sem = sem_open("/table", O_CREAT, 0644, 1);
-	printf("%d", get_bool(table->table_sem, &(table->all_threads_ready)));
 	table->forks = malloc(sizeof(t_fork) * table->philo_nbr);
 	if (table->forks == NULL)
 		return (0);
 	table->forks_malloc = true;
+	sem_unlink("/forks");
 	table->fork_sem = sem_open("/forks", O_CREAT, 0644, table->philo_nbr);
 	init_philo(table);
 	return (1);

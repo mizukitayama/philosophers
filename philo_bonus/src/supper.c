@@ -20,11 +20,10 @@ static void	*lone_philo(void	*arg)
 	wait_all_threads(philo->table);
 	set_long(philo->philo_sem, &(philo->last_meal_time),
 		gettime(MILLISECOND));
-	increase_long(philo->table->table_sem,
-		&(philo->table->threads_running_nbr));
 	write_status(TAKE_FIRST_FORK, philo);
-	while (!simulation_finished(philo->table))
-		ft_usleep(200, philo->table);
+	while (!philo_died(philo))
+		ft_usleep(10, philo->table);
+	write_status(DIED, philo);
 	return (NULL);
 }
 
@@ -82,28 +81,22 @@ static void	eat(t_philo *philo)
 	sem_post(philo->table->fork_sem);
 }
 
-/*
- * 1. waits all philos to start their simulation
- * 2. endless loop of eat, sleep, think
- * 
- * increase_long() -> synchro with monitor
- * 
-*/
 static void	*dinner_simulation(void *data)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	wait_all_threads(philo->table);
+	// TODO: forkが全て終わるのを待てるくらいの時間sleepさせる。
+	// start_simulation_time(+a)まで待つ
 	set_long(philo->philo_sem, &(philo->last_meal_time),
 		gettime(MILLISECOND));
-	increase_long(philo->table->table_sem,
-		&(philo->table->threads_running_nbr));
 	desynchronize_philo(philo);
-	while (!simulation_finished(philo->table))
+	while (!philo_died(philo))
 	{
 		if (get_bool(philo->philo_sem, &(philo->full)))
+		{
 			break ;
+		}
 		eat(philo);
 		write_status(SLEEPING, philo);
 		ft_usleep(philo->table->time_to_sleep, philo->table);
@@ -112,14 +105,6 @@ static void	*dinner_simulation(void *data)
 	return (NULL);
 }
 
-/*
- * 1.  if must_eat == 0, return 0
- * 1.1 if num_of_philo == 1, specific func
- * 2. creates all threads, all philos
- * 3. creates a monitor thread
- * 4. synchronize the beggining of the simulation
- * 5. JOIN every philo
-*/
 void	start_dinner(t_table *table)
 {
 	long	i;
@@ -129,22 +114,20 @@ void	start_dinner(t_table *table)
 		return ;
 	else if (table->philo_nbr == 1)
 	{
-		if (pthread_create(&(table->philos[0].thread_id), NULL,
-				lone_philo, &(table->philos[0])) != 0)
-			return ;
+		set_bool(table->table_sem, &(table->all_threads_ready), true);
+		set_long(table->table_sem, &(table->start_simulation_time), gettime(MILLISECOND));
+		lone_philo(&(table->philos[0]));
+		return ;
 	}
 	else
-		while (++i < table->philo_nbr)
-			if (pthread_create(&(table->philos[i].thread_id), NULL,
-					dinner_simulation, &(table->philos[i])) != 0)
-				return ;
-	if (pthread_create(&(table->monitor), NULL, monitor, table) != 0)
-		return ;
-	table->start_simulation_time = gettime(MILLISECOND);
-	set_bool(table->table_sem, &(table->all_threads_ready), true);
-	i = -1;
-	while (++i < table->philo_nbr)
-		pthread_join(table->philos[i].thread_id, NULL);
-	set_bool(table->table_sem, &(table->end_simulation), true);
-	pthread_join(table->monitor, NULL);
+	{
+		set_long(table->table_sem, &(table->start_simulation_time), gettime(MILLISECOND));
+    while (++i < table->philo_nbr) {
+        table->philos[i].pid = fork();
+        if (table->philos[i].pid == 0) {
+            dinner_simulation(&(table->philos[i]));
+            exit(0);
+        }
+    }
+	}
 }
