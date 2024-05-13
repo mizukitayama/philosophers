@@ -25,10 +25,8 @@ static bool	is_digit(char c)
 static const char	*valid_input(const char *str)
 /* checks negatives, degits, spaces, int max */
 {
-	int				len;
 	const char		*num;
 
-	len = 0;
 	while (is_space(*str))
 		str++;
 	if (*str == '+')
@@ -41,7 +39,6 @@ static const char	*valid_input(const char *str)
 			free_programme("Error\n"Y_ERR_MSG"The input is not a digit.", NULL);
 			return (NULL);
 		}
-		len++;
 		str++;
 	}
 	return (num);

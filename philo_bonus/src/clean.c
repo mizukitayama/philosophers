@@ -14,13 +14,13 @@
 
 void	clean_programme(t_table *table)
 {
-	t_philo	*philo;
+	// t_philo	*philo;
 	long	i;
 
 	i = 0;
 	while (i < table->philo_nbr)
 	{
-		philo = table->philos + i;
+		// philo = table->philos + i;
 		sem_unlink("/philo");
 		i++;
 	}
