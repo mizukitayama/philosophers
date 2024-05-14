@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:48 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/11 17:12:58 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 13:41:58 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	free_programme(char *message, t_table *table)
 {
 	if (table != NULL)
 	{
-		if (table->forks_malloc == true)
-			free(table->forks);
 		if (table->philos_malloc == true)
 			free(table->philos);
 	}
@@ -53,7 +51,7 @@ long	gettime(t_time_code time_code)
 /*
  * refine last microsec with spinlock
 */
-void	ft_usleep(long usec, t_table *table)
+void	ft_usleep(long usec)
 {
 	long	start;
 	long	elapsed;
@@ -62,8 +60,6 @@ void	ft_usleep(long usec, t_table *table)
 	start = gettime(MICROSECOND);
 	while (gettime(MICROSECOND) - start < usec)
 	{
-		if (simulation_finished(table))
-			break ;
 		elapsed = gettime(MICROSECOND) - start;
 		remaining = usec - elapsed;
 		if (remaining > 1000)

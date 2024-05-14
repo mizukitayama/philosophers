@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:42 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/14 12:51:26 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 13:45:15 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@ static void	*lone_philo(void	*arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	wait_all_threads(philo->table);
 	set_long(philo->philo_sem, &(philo->last_meal_time),
 		gettime(MILLISECOND));
 	write_status(TAKE_FIRST_FORK, philo);
 	while (!philo_died(philo))
-		ft_usleep(10, philo->table);
+		ft_usleep(10);
 	write_status(DIED, philo);
 	return (NULL);
 }
@@ -53,7 +52,7 @@ void	think(t_philo *philo, bool is_pre_simulation)
 	time_to_think = time_to_eat * 2 - time_to_sleep;
 	if (time_to_think < 0)
 		time_to_think = 0;
-	ft_usleep(time_to_think * 0.3, philo->table);
+	ft_usleep(time_to_think * 0.3);
 }
 
 /*
@@ -71,7 +70,7 @@ static void	eat(t_philo *philo)
 		gettime(MILLISECOND));
 	philo->meals_counter++;
 	write_status(EATING, philo);
-	ft_usleep(philo->table->time_to_eat, philo->table);
+	ft_usleep(philo->table->time_to_eat);
 	if (philo->table->nbr_limit_meals > 0
 		&& philo->meals_counter == philo->table->nbr_limit_meals)
 	{
@@ -96,12 +95,10 @@ static void	*dinner_simulation(void *data)
 	while (1)
 	{
 		if (get_bool(philo->philo_sem, &(philo->full)))
-		{
 			break ;
-		}
 		eat(philo);
 		write_status(SLEEPING, philo);
-		ft_usleep(philo->table->time_to_sleep, philo->table);
+		ft_usleep(philo->table->time_to_sleep);
 		think(philo, false);
 	}
 	return (NULL);
@@ -116,7 +113,6 @@ void	start_dinner(t_table *table)
 		return ;
 	else if (table->philo_nbr == 1)
 	{
-		set_bool(table->table_sem, &(table->all_threads_ready), true);
 		set_long(table->table_sem, &(table->start_simulation_time), gettime(MILLISECOND));
 		lone_philo(&(table->philos[0]));
 	}

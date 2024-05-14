@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:04:45 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/11 19:18:57 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 13:40:04 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,3 @@ long	get_long(sem_t *sem, long *value)
 	return (rt);
 }
 
-bool	simulation_finished(t_table *table)
-{
-	return (get_bool(table->table_sem, &(table->end_simulation)));
-}
