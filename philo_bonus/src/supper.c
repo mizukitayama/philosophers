@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:42 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/14 21:18:35 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 21:50:23 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,13 @@ void	eat(t_philo *philo)
 	philo->meals_counter++;
 	write_status(EATING, philo);
 	ft_usleep(philo->table->time_to_eat);
+	sem_post(philo->table->fork_sem);
+	sem_post(philo->table->fork_sem);
 	if (philo->table->nbr_limit_meals > 0
 		&& philo->meals_counter == philo->table->nbr_limit_meals)
 	{
 		set_bool(philo->philo_sem, &(philo->full), true);
 	}
-	sem_post(philo->table->fork_sem);
-	sem_post(philo->table->fork_sem);
 }
 
 void	create_process(t_table *table)
@@ -101,7 +101,7 @@ void	start_dinner(t_table *table)
 	else
 	{
 		set_long(table->table_sem, &(table->start_simulation_time),
-			gettime(MILLISECOND) + 1000);
+			gettime(MILLISECOND) + 2000);
 		create_process(table);
 	}
 }
