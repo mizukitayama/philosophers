@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:42 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/14 12:27:46 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 12:51:26 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,12 +119,12 @@ void	start_dinner(t_table *table)
 		set_bool(table->table_sem, &(table->all_threads_ready), true);
 		set_long(table->table_sem, &(table->start_simulation_time), gettime(MILLISECOND));
 		lone_philo(&(table->philos[0]));
-		return ;
 	}
 	else
 	{
 		set_long(table->table_sem, &(table->start_simulation_time), gettime(MILLISECOND) + 1000);
 		while (++i < table->philo_nbr) {
+			set_long(table->philos[i].philo_sem, &(table->philos[i].last_meal_time), table->start_simulation_time);
 			table->philos[i].pid = fork();
 			if (table->philos[i].pid == 0) {
 				dinner_simulation(&(table->philos[i]));

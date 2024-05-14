@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:34 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/14 12:15:52 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 12:47:24 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	*monitor(void *data)
 {
 	t_philo	*philo;
 
+	
 	philo = (t_philo *)data;
 	while (!simulation_finished(philo->table))
 	{
