@@ -1,5 +1,5 @@
 CC		=	cc
-CFLAGS	=
+CFLAGS	=	-Wall -Wextra -Werror
 RM		=	rm -rf
 AR		=	ar rcs
 
@@ -7,7 +7,7 @@ OBJ_DIR	=	obj/
 SRC_DIR	=	src/
 SRCS	=	main.c utils.c parse_input.c init.c \
 				supper.c getter_setter.c synchro.c write.c clean.c monitor.c
-NAME	=	philo
+NAME	=	philo_bonus
 
 SRCS_OBJS	=	$(SRCS:.c=.o)
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRCS_OBJS))

@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:01:20 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/11 18:39:28 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 12:16:26 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 # define MIN_TIME	80000
 
@@ -76,6 +77,7 @@ typedef struct s_philo
 	t_mtx			philo_mutex;
 	sem_t			*philo_sem;
 	pid_t			pid;
+	pthread_t		monitor;
 }	t_philo;
 
 struct s_table
@@ -95,7 +97,6 @@ struct s_table
 	bool		philos_malloc;
 	t_mtx		table_mutex;
 	t_mtx		write_mutex;
-	pthread_t	monitor;
 	sem_t		*fork_sem;
 	sem_t		*write_sem;
 	sem_t		*table_sem;

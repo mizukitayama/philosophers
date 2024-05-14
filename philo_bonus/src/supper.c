@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:42 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/11 19:18:57 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 12:27:46 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,14 @@ static void	*dinner_simulation(void *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	// TODO: forkが全て終わるのを待てるくらいの時間sleepさせる。
-	// start_simulation_time(+a)まで待つ
+	while (gettime(MILLISECOND) < philo->table->start_simulation_time)
+		;
+	if (pthread_create(&(philo->monitor), NULL, monitor, philo) != 0)
+		return (NULL);
 	set_long(philo->philo_sem, &(philo->last_meal_time),
 		gettime(MILLISECOND));
 	desynchronize_philo(philo);
-	while (!philo_died(philo))
+	while (1)
 	{
 		if (get_bool(philo->philo_sem, &(philo->full)))
 		{
@@ -121,13 +123,17 @@ void	start_dinner(t_table *table)
 	}
 	else
 	{
-		set_long(table->table_sem, &(table->start_simulation_time), gettime(MILLISECOND));
-    while (++i < table->philo_nbr) {
-        table->philos[i].pid = fork();
-        if (table->philos[i].pid == 0) {
-            dinner_simulation(&(table->philos[i]));
-            exit(0);
-        }
-    }
+		set_long(table->table_sem, &(table->start_simulation_time), gettime(MILLISECOND) + 1000);
+		while (++i < table->philo_nbr) {
+			table->philos[i].pid = fork();
+			if (table->philos[i].pid == 0) {
+				dinner_simulation(&(table->philos[i]));
+				exit(1);
+			}
+		}
+		i = -1;
+		waitpid(-1, NULL, WCONTINUED);
+		while (++i < table->philo_nbr)
+			kill(table->philos[i].pid, SIGINT);
 	}
 }

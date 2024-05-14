@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:51 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/11 19:18:57 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 12:21:49 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ void	write_status(t_philo_status status, t_philo *philo)
 			printf(B_TIME "%-7ld" RST "%ld is sleeping\n", elapsed, philo->id);
 		else if (status == THINKING && !simulation_finished(philo->table))
 			printf(B_TIME "%-7ld" RST "%ld is thinking\n", elapsed, philo->id);
+		sem_post(philo->table->write_sem);
 	}
-	sem_post(philo->table->write_sem);
 }
