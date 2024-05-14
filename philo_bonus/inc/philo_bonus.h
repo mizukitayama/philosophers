@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:01:20 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/14 13:43:35 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 20:52:15 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
 # include <sys/time.h>
 # include <limits.h>
 # include <errno.h>
-#include <semaphore.h>
+# include <semaphore.h>
 # include <fcntl.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <signal.h>
 
 # define MIN_TIME	80000
 
@@ -98,6 +98,11 @@ int		init_data(t_table *table);
 /* dinner simulation */
 void	start_dinner(t_table *table);
 void	think(t_philo *philo, bool is_pre_simulation);
+void	eat(t_philo *philo);
+
+/* cycle */
+void	*lone_philo(void	*arg);
+void	*dinner_simulation(void *data);
 
 /* utils */
 void	free_programme(char *message, t_table *table);

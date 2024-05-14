@@ -6,7 +6,7 @@
 /*   By: mtayama <mtayama@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:06:48 by mtayama           #+#    #+#             */
-/*   Updated: 2024/05/14 13:41:58 by mtayama          ###   ########.fr       */
+/*   Updated: 2024/05/14 21:05:07 by mtayama          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	ft_usleep(long usec)
 	{
 		elapsed = gettime(MICROSECOND) - start;
 		remaining = usec - elapsed;
-		if (remaining > 1000)
+		if (remaining > 3000)
 			usleep(remaining / 2);
 		else
 			while (gettime(MICROSECOND) - start < usec)
